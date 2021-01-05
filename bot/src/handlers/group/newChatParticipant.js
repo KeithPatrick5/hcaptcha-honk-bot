@@ -4,9 +4,9 @@ const {
   updateGroup,
 } = require("../../db/controllers/group");
 const restrictUser = require("../../utils/restrictUser");
-const { saveCaptcha } = require("../../db/controllers/captcha");
-const Extra = require("telegraf/extra");
-const { nanoid } = require("nanoid");
+// const { saveCaptcha } = require("../../db/controllers/captcha");
+// const Extra = require("telegraf/extra");
+// const { nanoid } = require("nanoid");
 
 module.exports = async (ctx) => {
   // If new_chat_participant update then
@@ -21,6 +21,7 @@ module.exports = async (ctx) => {
     );
     try {
       let group = await getGroup(ctx.chat.id);
+      if (!group) throw "New group";
       if (group.status === "KICKED") {
         // Update status to 'Active'
         let updateValues = { $set: { status: "ACTIVE" } };
@@ -44,10 +45,11 @@ module.exports = async (ctx) => {
       }
     }
 
-    ctx.reply("Bot successfuly added to " + ctx.chat.title);
-
     const link = `https://t.me/${ctx.me}?start=${ctx.chat.id}`;
-    ctx.reply("Click on this link to remove restrictions with bot " + link);
+    let msg = `Bot successfuly added to ${ctx.chat.title}`;
+    msg += `\n\nClick on this link to remove restrictions with bot ${link}`;
+    await new Promise((r) => setTimeout(r, 1000));
+    await ctx.reply(msg);
   } else {
     // Someone added to group
     console.log(

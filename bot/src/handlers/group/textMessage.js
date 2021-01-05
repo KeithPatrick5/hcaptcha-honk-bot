@@ -17,7 +17,7 @@ module.exports = async (ctx) => {
   let group = await getGroup(groupId);
   if (group.admins) {
     // If user in admins then return
-    console.log("Group admins: ", group.admins);
+    console.log("Checking user in group admins...");
     for (const admin of group.admins) {
       if (admin.user && admin.user.id === userId) {
         console.log("User is admin");

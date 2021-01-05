@@ -15,6 +15,7 @@ exports.getGroup = async (id) => {
         return group;
     } catch (error) {
         console.log(error);
+        throw error
     }
 };
 
