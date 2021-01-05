@@ -2,8 +2,22 @@ const Extra = require("telegraf/extra");
 const { nanoid } = require("nanoid");
 const { saveCaptcha } = require("../../db/controllers/captcha");
 const restrictUser = require("../../utils/restrictUser");
-const { getGroup } = require("../../db/controllers/group");
+const { getGroup, updateGroup } = require("../../db/controllers/group");
 const { getSession } = require("../../db/controllers/session");
+
+const updAdmins = async (ctx, group) => {
+  // Update admins for group in database
+  try {
+    const admins = await ctx.telegram.getChatAdministrators(ctx.chat.id);
+    await new Promise((r) => setTimeout(r, 2000));
+    let updateValues = { $set: { admins: admins } };
+    await updateGroup(group._id, updateValues);
+    await ctx.reply("Ok, i remember admins of this group 🧠 🤓");
+  } catch (error) {
+    console.log(error);
+    await ctx.reply("🥺 Error" + error);
+  }
+};
 
 /**
  * Handle text messages in any group / supergroup
@@ -21,6 +35,15 @@ module.exports = async (ctx) => {
     for (const admin of group.admins) {
       if (admin.user && admin.user.id === userId) {
         console.log("User is admin");
+
+        if (ctx.message.text === "/updateadmins") {
+          // Update admins for group in database
+          await updAdmins(ctx, group);
+        } else if (ctx.message.text === "/captcha") {
+          // Captcha link
+          const link = `https://t.me/${ctx.me}?start=${groupId}`;
+          await ctx.reply("Captcha link for this group: " + link);
+        }
         return;
       }
     }
@@ -91,7 +114,7 @@ module.exports = async (ctx) => {
     console.log("session", session);
   } catch (error) {
     // User dont start conversation with bot yet
-    console.log('User dont start conversation with bot yet.');
+    console.log("User dont start conversation with bot yet.");
   }
   if (session) {
     // Create captcha and send in pm
