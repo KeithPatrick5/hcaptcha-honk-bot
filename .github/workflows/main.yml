@@ -39,14 +39,14 @@ jobs:
       uses: docker/build-push-action@v2.2.1
       with:
         context: ./app
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/hcaptcha_app:latest
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/hcaptcha_app
         push: true
         file: ./app/Dockerfile
     - name: Build docker image for Bot
       uses: docker/build-push-action@v2.2.1
       with:
         context: ./bot
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/hcaptchabot:latest
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/hcaptchabot
         push: true
         file: ./bot/Dockerfile
     
