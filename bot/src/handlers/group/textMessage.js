@@ -91,6 +91,7 @@ module.exports = async (ctx) => {
     console.log("session", session);
   } catch (error) {
     // User dont start conversation with bot yet
+    console.log('User dont start conversation with bot yet.');
   }
   if (session) {
     // Create captcha and send in pm
