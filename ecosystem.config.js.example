@@ -1,0 +1,59 @@
+const MONGO_INITDB_ROOT_USERNAME = "root";
+const MONGO_INITDB_ROOT_PASSWORD = "toor";
+const MONGO_URL_PROD = `mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/${BOT_NAME}?authSource=admin`
+const MONGO_URL_DEV = ""; //mongodb://dbuser:dbpass@host:port/dbname ?authSource=admin
+const BOT_TOKEN = "123456789:AAHasdwdqwQWDQWDWQasdasdQWEsd";
+const BOT_ID = 123456789; // First part of token
+const BOT_NAME = "hcaptcha";
+const BOT_ADMINS = ""; // "111111111,22222222,33333333" Telegram User IDs  
+const WEBAPP_URI = ""; // https://domain.com
+
+
+module.exports = {
+  apps: [
+    {
+      name: `${BOT_NAME}bot`,
+      script: "./bot/index.js",
+      time: true,
+      exec_mode: "fork",
+      instances: 1,
+      watch: true,
+      autorestart: false,
+      env_development: {
+        NODE_ENV: "development",
+        MONGO_URL: MONGO_URL_DEV,
+        BOT_TOKEN: BOT_TOKEN,
+        BOT_ID: BOT_ID,
+        ADMINS: BOT_ADMINS,
+        TIMEOUT: 1, // Minutes
+      },
+      env_production: {
+        NODE_ENV: "production",
+        MONGO_URL: MONGO_URL_PROD,
+        BOT_TOKEN: BOT_TOKEN,
+        BOT_ID: BOT_ID,
+        ADMINS: BOT_ADMINS,
+        TIMEOUT: 1,
+        WEBAPP_URI: WEBAPP_URI, 
+      },
+    },
+    {
+      name: `${BOT_NAME}_app`,
+      script: "yarn",
+      args: "start",
+      cwd: "./app/",
+      time: true,
+      exec_mode: "fork",
+      instances: 1,
+      watch: true,
+      autorestart: false,
+      env_development: {
+        PORT: 3000,
+      },
+      env_production: {
+        PORT: 8000,
+        NODE_ENV: "production",
+      },
+    },
+  ],
+};

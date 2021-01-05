@@ -1,0 +1,22 @@
+{
+  "name": "hcaptcha",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start -p 8000"
+  },
+  "dependencies": {
+    "@hcaptcha/react-hcaptcha": "^0.2.1",
+    "amqplib": "^0.6.0",
+    "autoprefixer": "^10.1.0",
+    "mongoose": "^5.11.7",
+    "next": "10.0.3",
+    "postcss": "^8.2.1",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "swr": "^0.3.9",
+    "tailwindcss": "^2.0.2"
+  }
+}

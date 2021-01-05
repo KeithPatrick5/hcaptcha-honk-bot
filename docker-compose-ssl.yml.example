@@ -1,0 +1,77 @@
+version: '3.1'
+
+services:
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+  rabbit1:
+    image: "rabbitmq:3-management"
+    hostname: "rabbit1"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "ASDADWQEWQDQWDSDAS"
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    labels:
+      NAME: "rabbitmq1"
+  hcaptchabot:
+    image: pytour/hcaptchabot
+    restart: always
+    environment:
+      MONGO_URL: "mongodb://root:password@mongo:27017/hcaptcha?authSource=admin"
+      BOT_TOKEN: ""
+      BOT_NAME: ""
+      BOT_ID: 
+      ADMINS: ""
+      TIMEOUT: 1
+      WEBAPP_URI: "http://domain.com"
+      RABBIT_MQ_SERVER: "rabbit1"
+      RABBIT_MQ_USER: "rabbitmq"
+      RABBIT_MQ_PASS: "rabbitmq"
+  hcaptchaweb:
+    image: pytour/hcaptcha_app
+    restart: always
+    environment:
+      ENV_LOCAL_MONGODB_URI: "mongodb://root:password@mongo:27017/hcaptcha?authSource=admin"
+      ENV_LOCAL_HCAPTCHA_KEY: ""
+      ENV_LOCAL_HCAPTCHA_SECRET: ""
+      RABBIT_MQ_SERVER: "rabbit1"
+      RABBIT_MQ_USER: "rabbitmq"
+      RABBIT_MQ_PASS: "rabbitmq"
+    ports:
+      - 8000:8000
+  nginx: 
+    image: nginx:latest
+    container_name: production_nginx
+    volumes:
+      - ./nginx-ssl/conf.d:/etc/nginx/conf.d
+      - ./nginx-ssl/certbot/conf:/etc/nginx/ssl
+      - ./nginx-ssl/certbot/data:/var/www/certbot
+    ports:
+      - 80:80
+      - 443:443
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    certbot:
+      image: certbot/certbot:latest
+      entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+      volumes:
+          - ./nginx-ssl/certbot/conf:/etc/letsencrypt
+          - ./nginx-ssl/certbot/logs:/var/log/letsencrypt
+          - ./nginx-ssl/certbot/data:/var/www/certbot
