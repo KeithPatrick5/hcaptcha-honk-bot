@@ -32,7 +32,7 @@ services:
     labels:
       NAME: "rabbitmq1"
   hcaptchabot:
-    image: pytour/hcaptchabot
+    image: keithpatrick/hcaptchabot
     restart: always
     environment:
       MONGO_URL: "mongodb://root:password@mongo:27017/hcaptcha?authSource=admin"
@@ -46,7 +46,7 @@ services:
       RABBIT_MQ_USER: "rabbitmq"
       RABBIT_MQ_PASS: "rabbitmq"
   hcaptchaweb:
-    image: pytour/hcaptcha_app
+    image: keithpatrick/hcaptcha_app
     restart: always
     environment:
       ENV_LOCAL_MONGODB_URI: "mongodb://root:password@mongo:27017/hcaptcha?authSource=admin"

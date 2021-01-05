@@ -14,5 +14,5 @@ WORKDIR /app
 COPY src ./src
 COPY index.js .
 COPY package.json . 
-RUN npm install
+RUN npm install --force
 CMD ["node","index.js"]

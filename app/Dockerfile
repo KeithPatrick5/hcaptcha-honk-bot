@@ -9,7 +9,7 @@ WORKDIR /usr/src
 COPY . /usr/src
 
 # install dependencies
-RUN npm install
+RUN npm install --force
 
 # start app
 RUN npm run build
