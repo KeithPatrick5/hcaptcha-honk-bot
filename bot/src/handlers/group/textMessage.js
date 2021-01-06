@@ -89,7 +89,7 @@ module.exports = async (ctx) => {
     // User dont start conversation with bot yet
     console.log("User dont start conversation with bot yet.");
   }
-  if (session.data) {
+  if (session && session.data) {
     // Create captcha and send in pm
     const id = nanoid(6);
     const captcha = {
