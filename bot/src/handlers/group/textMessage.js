@@ -48,6 +48,13 @@ module.exports = async (ctx) => {
       }
     }
   }
+  // If message from non-admin Bot.
+  // We dont set restrictions but delete message after 10 sec
+  if (ctx.message.from.is_bot) {
+    const message_id = ctx.message.message_id;
+    return await deleteLastMessage(groupId, message_id, ctx);
+  }
+
   // Set restrictions for each message from regular user in group
   try {
     await restrictUser(ctx, userId);
