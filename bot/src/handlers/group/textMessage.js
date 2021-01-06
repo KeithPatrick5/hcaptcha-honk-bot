@@ -77,53 +77,19 @@ module.exports = async (ctx) => {
     console.log("Resrict error:", error.message);
   }
 
-  // Legacy code
-  {
-    /*
-  let timeout = process.env.TIMEOUT
-  let msg = `${ctx.message.from.first_name} you are restricted at this group ${timeout == 0 ? '' : `for ${timeout} minutes`}`;
-  msg += "\nTo skip restrictions solve captcha:";
-
-  const id = nanoid(6);
-  const captcha = {
-    id: id,
-    groupId: ctx.chat.id,
-    from: ctx.message.from,
-    status: "ACTIVE",
-  };
-  try {
-    await saveCaptcha(captcha);
-    console.log("Captcha saved id", id);
-  } catch (error) {
-    console.log(error);
-  }
-
-  const appLink =
-    process.env.NODE_ENV === "production"
-      ? `${process.env.WEBAPP_URI}/captcha/${id}`
-      : `https://t.me/${ctx.me}?start=${id}`; // DeepLink for dev mode tests
-  console.log("Captcha url", appLink);
-  await ctx.reply(
-    msg,
-    Extra.markup((m) => m.inlineKeyboard([[m.urlButton("Captcha", appLink)]]))
-  );
-  */
-  }
-
   // Check if user already exists in Sessions collection
   // If exists, then send captcha message in private with user conversation
   // Note: session key = "userId:userId"
-
   let session;
   let key = `${userId}:${userId}`;
   try {
     session = await getSession(key);
-    console.log("session", session);
+    console.log('Session key', session.key);
   } catch (error) {
     // User dont start conversation with bot yet
     console.log("User dont start conversation with bot yet.");
   }
-  if (session) {
+  if (session.data) {
     // Create captcha and send in pm
     const id = nanoid(6);
     const captcha = {
@@ -143,14 +109,21 @@ module.exports = async (ctx) => {
       process.env.NODE_ENV === "production"
         ? `${process.env.WEBAPP_URI}/captcha/${id}`
         : `http://localhost:3000/captcha/${id}`; // DeepLink for dev mode tests
-    await ctx.telegram.sendMessage(
-      userId,
-      `Your captcha:\n\n ${appLink}`,
-      Extra.markup((m) => m.inlineKeyboard([[m.urlButton("Captcha", appLink)]]))
-    );
+
+    try {
+      await ctx.telegram.sendMessage(
+        userId,
+        `Your captcha:\n\n ${appLink}`,
+        Extra.markup((m) =>
+          m.inlineKeyboard([[m.urlButton("Captcha", appLink)]])
+        )
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  // TODO: delete last user message after 10 sec
+  // Delete last user message after 10 sec
   const message_id = ctx.message.message_id;
   await deleteLastMessage(groupId, message_id, ctx);
 };

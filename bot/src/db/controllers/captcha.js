@@ -6,7 +6,7 @@ const Captcha = require("../models/captchaModel");
  * @param {Object} captcha captcha object
  */
 exports.saveCaptcha = async (data) => {
-  console.log("saveCaptcha:", data);
+  //console.log("saveCaptcha:", data);
   data._id = new mongoose.Types.ObjectId();
   const captcha = new Captcha(data);
   await captcha.save();
