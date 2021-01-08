@@ -1,5 +1,9 @@
 # hCaptcha Honk Bot
 
+The bot we [forked](https://github.com/KeithPatrick5/telegram-bot) will block users from messaging in chat until they fill out a captcha. Each claim is met with a new restriction requiring users to fill out captcha, thus eliminating bots from claiming tokens.
+
+How it works: Watch this short [video](https://youtu.be/GDSLRQaHfic)
+
 ## Production mode
 ### Run it in production with docker-compose
 
