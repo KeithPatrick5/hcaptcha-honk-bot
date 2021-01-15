@@ -15,6 +15,13 @@ module.exports = async (ctx) => {
   let buttonsText;
   const text = ctx.message.text;
 
+  // Handle menu buttons
+  if (text === "About") {
+    return about(ctx);
+  } else if (text === "FAQ") {
+    return faq(ctx);
+  }
+
   if (isAdmin(ctx.from.id)) {
     // Check if text belongs to button
     buttonsText = [].concat.apply([], adminMenu);
@@ -51,14 +58,6 @@ module.exports = async (ctx) => {
       "Menu:",
       Markup.keyboard(adminMenu).resize().extra()
     );
-  }
-
-
-  // Handle menu buttons
-  if (text === "About") {
-    return about(ctx)
-  } else if (text === "FAQ") {
-    return faq(ctx)
   }
 
   // Default response
