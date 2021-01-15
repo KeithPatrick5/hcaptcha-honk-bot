@@ -5,6 +5,8 @@ const adminMenu = require("../../keyboards/adminMenu");
 const menu = require("../../keyboards/menu");
 const isAdmin = require("../../utils/isAdmin");
 const { getAllSessionsCount } = require("../../db/controllers/session");
+const about = require("./commands/about");
+const faq = require("./commands/faq");
 
 /**
  * Text messages in private chats (simple messages and buttons)
@@ -51,5 +53,14 @@ module.exports = async (ctx) => {
     );
   }
 
+
+  // Handle menu buttons
+  if (text === "About") {
+    return about(ctx)
+  } else if (text === "FAQ") {
+    return faq(ctx)
+  }
+
+  // Default response
   return ctx.replyWithHTML("Menu:", Markup.keyboard(menu).resize().extra());
 };
