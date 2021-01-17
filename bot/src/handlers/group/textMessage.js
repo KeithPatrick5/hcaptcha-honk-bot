@@ -46,7 +46,7 @@ module.exports = async (ctx) => {
 /updateadmins - 👥 update admins list\n
 /captcha - 🔗 🖼 captcha link\n
 /captcha_each_message - 🚧 💬 restrict users with Captcha on each message in group\n
-/captcha_new_users - 🚧 👤 restrict only new paticipants with Captcha\n
+/captcha_new_users - 🚧 👤 restrict only new participants with Captcha\n
 /clean_mode - 🧹 💬 toggle command Bot delete all new messages from users
 `;
           await ctx.reply(msg);

@@ -21,7 +21,7 @@ module.exports = async (ctx) => {
 
     let groupId = ctx.message.text.split(" ")[1];
     const group = await getGroup(groupId);
-    console.log(groupId, group);
+    if (process.env.NODE_ENV === "development") console.log(groupId, group);
 
     // Create captcha
     // Save captcha
