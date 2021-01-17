@@ -42,7 +42,7 @@ module.exports = async (ctx) => {
     const appLink =
       process.env.NODE_ENV === "production"
         ? `${process.env.WEBAPP_URI}/captcha/${id}`
-        : `http://localhost:3000/captcha/${id}`; // DeepLink for dev mode tests
+        : `http://127.0.0.1:3000/captcha/${id}`; // DeepLink for dev mode tests
     await ctx.reply(
       `Your captcha:\n\n ${appLink}`,
       Extra.markup((m) => m.inlineKeyboard([[m.urlButton("Captcha", appLink)]]))

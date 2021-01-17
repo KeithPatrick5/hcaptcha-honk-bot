@@ -1,4 +1,13 @@
-# hCaptcha Honk Bot
+<h1 align="center">Node.js hCaptcha Honk Bot</h1>
+
+<div align="center">
+
+Stop Telegram user-bots with hCaptcha
+
+[![Bot](https://img.shields.io/badge/Bot-HonkhCaptchaBot-00aced.svg?style=flat-square&logo=telegram)](https://telegram.me/HonkhCaptchaBot)
+[![Faucet](https://img.shields.io/badge/💬%20Faucet-Telegram%20Group-blue.svg?style=flat-square)](https://telegram.me/Honkfaucet)
+
+</div>
 
 The bot we [forked](https://github.com/KeithPatrick5/telegram-bot) will block users from messaging in chat until they fill out a captcha. Each claim is met with a new restriction requiring users to fill out captcha, thus eliminating bots from claiming tokens.
 

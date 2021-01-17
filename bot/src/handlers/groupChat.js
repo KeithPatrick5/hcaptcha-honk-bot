@@ -12,10 +12,8 @@ module.exports = async (ctx) => {
   // Only messages
   if (!ctx.message) return;
 
-  // Save meesage date
+  // Save mesage date
   ctx.session.lastMsgDate = new Date().toJSON();
-
-  // If chat admin skip restrictions
 
   if (ctx.message.new_chat_participant) {
     await newChatParticipant(ctx);
@@ -25,3 +23,8 @@ module.exports = async (ctx) => {
     await textMessage(ctx);
   }
 };
+
+// todo: add admin commands
+// /help - list of commands 
+// /captcha_each_message - restrict users with Captcha on each message in group
+// /captcha_new_users - restrict only new paticipants with Captcha

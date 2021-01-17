@@ -28,7 +28,8 @@ MongoClient.connect(process.env.MONGO_URL, {
     sessionName: "session",
   });
   bot.launch();
-  bot.telegram.getMe().then((info) => console.log("Bot started", info));
+  let info = await bot.telegram.getMe();
+  console.log("Bot started", info);
   await updateHandler(bot);
   notification(bot);
 });
