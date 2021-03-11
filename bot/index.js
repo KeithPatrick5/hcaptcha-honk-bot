@@ -9,7 +9,9 @@ const { notification } = require("./src/utils/notification");
 
 let session;
 // Middlewares
-if (process.env.NODE_ENV === "development") bot.catch((e) => console.log(e));
+//if (process.env.NODE_ENV === "development") bot.catch((e) => console.log(e));
+bot.catch((e) => console.log(e));
+
 bot.use((...args) => session.middleware(...args));
 bot.use((ctx, next) => {
   //console.log(JSON.stringify(ctx.update, null, 2));
@@ -31,7 +33,12 @@ MongoClient.connect(process.env.MONGO_URL, {
   let info = await bot.telegram.getMe();
   console.log("Bot started", info);
   await updateHandler(bot);
-  notification(bot);
+  
+  try {
+    notification(bot);
+  } catch (error) {
+    console.log('Notification error:', error);
+  }
 });
 
 mongoose.connect(
